@@ -1,0 +1,79 @@
+version: "3.9"
+
+services:
+  auth-service:
+    build:
+      context: ./services/auth-service
+    container_name: auth-service
+    ports:
+      - "8000:8000"
+    depends_on:
+      - auth-db
+    environment:
+      - DATABASE_HOST=auth-db
+      - DATABASE_PORT=5432
+      - DATABASE_NAME=authdb
+      - DATABASE_USER=authuser
+      - DATABASE_PASSWORD=authpass
+    networks:
+      - mentalnet
+
+  auth-db:
+    image: postgres:14
+    container_name: auth-db
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=authdb
+      - POSTGRES_USER=authuser
+      - POSTGRES_PASSWORD=authpass
+    volumes:
+      - auth-db-data:/var/lib/postgresql/data
+    networks:
+      - mentalnet
+
+  chatbot-service:
+    build:
+      context: ./services/chatbot-service
+    container_name: chatbot-service
+    ports:
+      - "8001:8001"
+    depends_on:
+      - chat-db
+    env_file:
+      - ./services/chatbot-service/.env
+    networks:
+      - mentalnet
+
+  chat-db:
+    image: postgres:14
+    container_name: chat-db
+    environment:
+      - POSTGRES_DB=chatdb
+      - POSTGRES_USER=chatuser
+      - POSTGRES_PASSWORD=chatpass
+    volumes:
+      - chat-db-data:/var/lib/postgresql/data
+    networks:
+      - mentalnet
+
+  dialogflow-chatbot:
+    build:
+      context: services/chat-service
+    container_name: dialogflow-chatbot
+    ports:
+      - "8002:8002"
+    volumes:
+      - ./services/chat-service/app/prueba.json:/app/prueba.json
+    env_file:
+      - ./services/chat-service/.env
+    networks:
+      - mentalnet
+
+volumes:
+  auth-db-data:
+  chat-db-data:
+
+networks:
+  mentalnet:
+    driver: bridge
