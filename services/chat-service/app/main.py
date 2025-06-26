@@ -5,7 +5,6 @@ import os
 
 app = FastAPI()
 
-# Carga de variables de entorno
 PROJECT_ID = os.getenv("DIALOGFLOW_PROJECT_ID")
 
 class MessageRequest(BaseModel):

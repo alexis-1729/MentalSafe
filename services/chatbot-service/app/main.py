@@ -7,33 +7,32 @@ import os
 from dotenv import load_dotenv
 import google.generativeai as genai
 
-# Cargar variables de entorno
+#Cargar variables de entorno
 load_dotenv()
 
-# Inicializar clave de API de Google
+#Inicializar clave de API de Google
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
-# Crear las tablas si no existen
+#Crear las tablas
 models.Base.metadata.create_all(bind=engine)
 
-# Inicializar la app FastAPI
+#Inicializar 
 app = FastAPI()
 
-# Esquema de entrada
 class ChatMessage(BaseModel):
     message: str
     session_id: str = None
 
-# Endpoint de conversación
+# Endpoint 
 @app.post("/chat")
 def chat_with_gemini(chat: ChatMessage):
     try:
-        # Inicializar cliente Gemini
+        #Inicializar cliente Gemini
         model = genai.GenerativeModel("gemma-3-12b-it")
         response = model.generate_content(chat.message)
         reply = response.text
 
-        # Guardar historial en base de datos
+        # Guardar historial 
         db: Session = SessionLocal()
         new_entry = models.ChatHistory(
             session_id=chat.session_id or "default",
@@ -50,7 +49,7 @@ def chat_with_gemini(chat: ChatMessage):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-# Endpoint para obtener historial de una sesión
+#Endpoint para obtener historial de una sesión
 @app.get("/history/{session_id}")
 def get_history(session_id: str):
     try:
@@ -62,3 +61,4 @@ def get_history(session_id: str):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
