@@ -1,16 +1,12 @@
 from fastapi import FastAPI
-from app.db import get_connection
+from .database import get_db, Base, engine
+from .routes import router
 
+#Creando tablas de la db
+Base.metadata.create_all(bind = engine)
+#Inicia fastapi
 app = FastAPI()
+#incluye los endpoints o los registra
+app.include_router(router)
 
-@app.get("/")
-def root():
-    conn = get_connection()
-    if conn:
-        cur = conn.cursor()
-        cur.execute("SELECT NOW();")
-        result = cur.fetchone()
-        conn.close()
-        return {"message": "Conexión exitosa", "hora_actual": result}
-    else:
-        return {"message": "No se pudo conectar a la base de datos"}
+

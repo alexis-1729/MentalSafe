@@ -1,11 +1,22 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Depends, APIRouter, Query
 from pydantic import BaseModel
-from sqlalchemy.orm import Session
-from app.database import SessionLocal, engine
-from app import models
-import os
-from dotenv import load_dotenv
+
+from sqlalchemy.orm import declarative_base, relationship, Session
+
+from app.schemas.chat import ChatSessionCreate, ChatSessionResponse
+from app.database import SessionLocal, engine, get_db
+
 import google.generativeai as genai
+from dotenv import load_dotenv
+from app import models
+from app.models import ChatSessions
+import uuid
+from datetime import datetime
+import os
+
+
+#
+router = APIRouter(prefix = "/chat", tags = ["Chat"])
 
 #Cargar variables de entorno
 load_dotenv()
@@ -19,46 +30,106 @@ models.Base.metadata.create_all(bind=engine)
 #Inicializar 
 app = FastAPI()
 
-class ChatMessage(BaseModel):
-    message: str
-    session_id: str = None
+#Endpoint crear sesiones
+@router.post("/sessions/", response_model = ChatSessionResponse)
+def create_chat_session(payload: ChatSessionCreate, db:Session = Depends(get_db)):
+    #Crear session
+    new_session = ChatSessions(
+        id_session = uuid.uuid4(),
+        user_id = payload.user_id,
+        title = payload.title,
+        created_at = datetime.utcnow()
+    )
+    db.add(new_session)
+    db.commit()
+    db.refresh(new_session)
 
-# Endpoint 
-@app.post("/chat")
-def chat_with_gemini(chat: ChatMessage):
-    try:
-        #Inicializar cliente Gemini
-        model = genai.GenerativeModel("gemma-3-12b-it")
-        response = model.generate_content(chat.message)
-        reply = response.text
+    return ChatSessionResponse(
+        session_id = new_session.id_session,
+        created_at = new_session.created_at
+    )
 
-        # Guardar historial 
-        db: Session = SessionLocal()
-        new_entry = models.ChatHistory(
-            session_id=chat.session_id or "default",
-            user_message=chat.message,
-            bot_reply=reply
+#listar sessiones de user --no probado
+@router.get("/sessions/{user_id}", response_model = List[ChatSessionResponse])
+def list_chat_sessions(user_id: str, 
+                       db:Session = Depends(get_db),
+                       skip: int = Query(0, ge = 0, description = "20"),
+                       limit: int = Query(10, ge = 1, le = 100, description = "7"),
+                       ):
+
+    sessions = db.query(ChatSessions).filter(ChatSessions.user_id == user_id)
+    .order_by(ChatSessions.created_at.desc())
+    .offset(skip)
+    .limit(limit)
+    .all()
+    return[
+        ChatSessionResponse(
+            session_id = s.session_id,
+            created_at = s.created_at
         )
-        db.add(new_entry)
-        db.commit()
-        db.refresh(new_entry)
-        db.close()
-#retorno de idsesion
-        return {"reply": reply}
+        for s in sessions
+    ]
 
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+#Eliminar sesion
+@router.delete("sessions/{session_id}")
+def delete_chat_session(session_id: str, db: Session = Depends(get_db)):
+    session_obj = db.query(ChatSessions).filter(ChatSessions.session_id == session_id).first()
+    if not session_obj:
+        raise HTTPException(status_code = 404, detail = "Session not found")
+    
+    db.delete(session_obj)
+    db.commit()
 
-#Endpoint para obtener historial de una sesión
-@app.get("/history/{session_id}")
-def get_history(session_id: str):
-    try:
-        db: Session = SessionLocal()
-        history = db.query(models.ChatHistory).filter_by(session_id=session_id).all()
-        db.close()
+    return {"message": f"Session  {session_id} deleted successfully"}
 
-        return [{"user": h.user_message, "bot": h.bot_reply} for h in history]
+#CrearMensaje agregar conexion con modelo ia
+@router.post("/sessions/{session_id}/messages", response_model = ChatMessageResponse)
+def create_chat_message(session_id: UUID, payload: ChatMessageCreate, 
+                        db: Session = Depends(get_db)):
+    #Verificacion de sesion existente
+    session_obj = db.query(ChatSessions).filter(ChatSessions.id_session == session_id).first()
+    if not session_obj:
+        raise HTTPException(status_code = 404, detail = "Session not found")
+    
+    #Crear el mensaje
+    new_message = ChatMessage(
+        session_id = session_id,
+        sender = payload.sender,
+        content = payload.content, 
+    )
 
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    db.add(new_message)
+    db.commit()
+    db.refresh(new_message)
+
+    return new_message
+
+#Listar Mensajes
+@router.get("/sessions/{session_id}/messages", response_model = List[ChatMessageResponse])
+def list_chat_messages(
+                       session_id:str,
+                       db:Session = Depends(get_db),
+                       skip: int = 0,
+                       limit: int = 50,
+                       ):
+    #verificar que la sesion existe
+    session_obj = db.query(ChatSession).filter(ChatSessions.id_session == session_id).first()
+    if not session_obj:
+        raise HTTPException(status_code = 404, detail = "Session not found")
+    messages = (
+        db.query(ChatMessage)
+        .filter(ChatMessage.session_id = session_id)
+        .order_by(ChatMessage.created_at.asc())
+        .offset(skip)
+        .limit(limit)
+        .all()
+    )
+
+    return messages 
+
+#
+app.include_router(router)
+
+ 
+
 
