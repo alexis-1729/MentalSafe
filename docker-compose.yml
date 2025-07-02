@@ -6,27 +6,19 @@ services:
       context: ./services/auth-service
     container_name: auth-service
     ports:
-      - "8000:8000"
+      - "8000:8000" #los puertos de ejecucion de un servicio
     depends_on:
       - auth-db
-    environment:
-      - DATABASE_HOST=auth-db
-      - DATABASE_PORT=5432
-      - DATABASE_NAME=authdb
-      - DATABASE_USER=authuser
-      - DATABASE_PASSWORD=authpass
+    env_file:
+      - ./services/auth-service/.env
     networks:
-      - mentalnet
+      - mentalnet #red local interna de microservicios
 
   auth-db:
     image: postgres:14
     container_name: auth-db
     ports:
-      - "5432:5432"
-    environment:
-      - POSTGRES_DB=authdb
-      - POSTGRES_USER=authuser
-      - POSTGRES_PASSWORD=authpass
+      - "5436:5432" #nota: el puerto de la base de datos sigue una secuencia, para el caso de users seria 5437:5432
     volumes:
       - auth-db-data:/var/lib/postgresql/data
     networks:
@@ -48,10 +40,8 @@ services:
   chat-db:
     image: postgres:14
     container_name: chat-db
-    environment:
-      - POSTGRES_DB=chatdb
-      - POSTGRES_USER=chatuser
-      - POSTGRES_PASSWORD=chatpass
+    ports:
+     - "5435:5432"
     volumes:
       - chat-db-data:/var/lib/postgresql/data
     networks:
@@ -59,8 +49,8 @@ services:
 
   dialogflow-chatbot:
     build:
-      context: services/chat-service
-    container_name: dialogflow-chatbot
+      context: services/chat-service #ruta de localizacion de un servicio
+    container_name: dialogflow-chatbot #nombre del contenedor y con el cual levantaras y contruiras el servicio
     ports:
       - "8002:8002"
     volumes:
@@ -69,6 +59,8 @@ services:
       - ./services/chat-service/.env
     networks:
       - mentalnet
+
+  users-service: #aqui la implementacion del servicio
 
 volumes:
   auth-db-data:
