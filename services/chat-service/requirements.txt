@@ -1,4 +1,6 @@
 fastapi
 uvicorn
 python-dotenv
-google-cloud-dialogflow
+psycopg2-binary
+sqlalchemy
+google-generativeai

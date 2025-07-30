@@ -1,21 +1,16 @@
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import get_db
-from ..database improt get_db
-from ..models import tags_test as TagsTestModel
-from ..schemas import tags_test_create, tags_test_response
-
+from app.database import get_db
+from  app.models import tags_test as TagsTestModel
+from app.schemas.tags_test import tags_test_create, tags_test_response
+from app.services.tags_test import *
 router = APIRouter(
     prefix = "/tags_test",
-    tags = "Tags test"
+    tags = ["Tags test"]
 )
 
 @router.post("/", response_model = tags_test_response)
 def create_tags_test(data: tags_test_create, db:Session = Depends(get_db)):
-    new_tag = TagsTestModel(**data.dict())
-    db.add(new_tag)
-    db.commit()
-    db.refresh(new_tag)
-    return new_tag
+    return create_tags_test(data, db)
 
 @router.get("/", response_model = list[tags_test_response])
 def list_tags(db:Session = Depends(get_db)):
@@ -23,8 +18,7 @@ def list_tags(db:Session = Depends(get_db)):
 
 @router.get("/{tag_id}", response_model = tags_test_response)
 def get_tag_by_id(tag_id: str, db:Session = Depends(get_db)):
-    result = db.query(TagsTestModel).filter(TagsTestModel.tag_id == tag_id).first()
-
-    if not tag:
+    result = get_tag_id(tag_id, db)
+    if not result:
         raise HTTPException(status_code = 404, detail="Tag not found")
     return result

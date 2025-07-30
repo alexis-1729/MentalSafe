@@ -1,0 +1,72 @@
+{
+  "beck": {
+    "name": "Test de Depresión de Beck",
+    "questions": [
+      {
+        "id": 1,
+        "text": "Me siento triste",
+        "options": {
+          "0": "No me siento triste",
+          "1": "Me siento triste gran parte del tiempo",
+          "2": "Estoy triste todo el tiempo",
+          "3": "Estoy tan triste o infeliz que no puedo soportarlo"
+        }
+      },
+      {
+        "id": 2,
+        "text": "Me siento desanimado respecto al futuro",
+        "options": {
+          "0": "No me siento desanimado respecto al futuro",
+          "1": "Me siento más desanimado que antes respecto al futuro",
+          "2": "No espero que las cosas funcionen para mí",
+          "3": "Siento que el futuro no tiene esperanza"
+        }
+      },
+      {
+        "id": 3,
+        "text": "Siento que he fracasado",
+        "options": {
+          "0": "No me siento un fracasado",
+          "1": "He fracasado más de lo que debería",
+          "2": "Cuando veo atrás, veo muchos fracasos",
+          "3": "Me siento como un completo fracaso"
+        }
+      }
+    ]
+  },
+  "hamilton": {
+    "name": "Test de Ansiedad de Hamilton",
+    "questions": [
+      {
+        "id": 1,
+        "text": "Estado de ánimo ansioso",
+        "options": {
+          "0": "Ausente",
+          "1": "Ligero",
+          "2": "Moderado",
+          "3": "Grave"
+        }
+      },
+      {
+        "id": 2,
+        "text": "Tensión",
+        "options": {
+          "0": "Ausente",
+          "1": "Se muestra inquieto",
+          "2": "Está nervioso durante la entrevista",
+          "3": "Se agita o se siente incapaz de relajarse"
+        }
+      },
+      {
+        "id": 3,
+        "text": "Miedo",
+        "options": {
+          "0": "Ausente",
+          "1": "Leves preocupaciones",
+          "2": "Miedo evidente durante la entrevista",
+          "3": "Temores persistentes que interfieren con la actividad"
+        }
+      }
+    ]
+  }
+}

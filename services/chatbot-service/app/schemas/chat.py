@@ -16,8 +16,8 @@ class ChatMessageCreate(BaseModel):
     content: str
 
 class ChatMessageResponse(BaseModel):
-    id_message: UUID
-    session_id: UUID
+    id_message: UUID4
+    session_id: UUID4
     sender: str
     content: str
     created_at: datetime
