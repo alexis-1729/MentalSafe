@@ -6,19 +6,19 @@ services:
       context: ./services/auth-service
     container_name: auth-service
     ports:
-      - "8000:8000" #los puertos de ejecucion de un servicio
+      - "8000:8000"
     depends_on:
       - auth-db
     env_file:
       - ./services/auth-service/.env
     networks:
-      - mentalnet #red local interna de microservicios
+      - mentalnet
 
   auth-db:
     image: postgres:14
     container_name: auth-db
     ports:
-      - "5436:5432" #nota: el puerto de la base de datos sigue una secuencia, para el caso de users seria 5437:5432
+      - "5436:5432"
     volumes:
       - auth-db-data:/var/lib/postgresql/data
     networks:
@@ -41,30 +41,43 @@ services:
     image: postgres:14
     container_name: chat-db
     ports:
-     - "5435:5432"
+      - "5435:5432"
     volumes:
       - chat-db-data:/var/lib/postgresql/data
     networks:
       - mentalnet
 
-  dialogflow-chatbot:
+  chat-service:
     build:
-      context: services/chat-service #ruta de localizacion de un servicio
-    container_name: dialogflow-chatbot #nombre del contenedor y con el cual levantaras y contruiras el servicio
+      context: ./services/chat-service
+    container_name: chat-service
     ports:
       - "8002:8002"
-    volumes:
-      - ./services/chat-service/app/prueba.json:/app/prueba.json
+    depends_on:
+      - chatbot-db
     env_file:
       - ./services/chat-service/.env
     networks:
       - mentalnet
 
-  users-service: #aqui la implementacion del servicio
+  chatbot-db:
+    image: postgres:14
+    container_name: chatbot-db
+    ports:
+      - "5437:5432"
+    volumes:
+      - chatbot-db-data:/var/lib/postgresql/data
+    environment:
+    - POSTGRES_DB=chatbotdb
+    - POSTGRES_USER=chatbotuser
+    - POSTGRES_PASSWORD=singer22
+    networks:
+      - mentalnet
 
 volumes:
   auth-db-data:
   chat-db-data:
+  chatbot-db-data:
 
 networks:
   mentalnet:
