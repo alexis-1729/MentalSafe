@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from app.routes import ia_messages, ia_sessions, ia_chat
-from .database import Base, engine
+from app.database import Base, engine
+
+from app.models import *
 #Inicializar clave de API de Google
 #Crear las tablas
 Base.metadata.create_all(bind=engine)

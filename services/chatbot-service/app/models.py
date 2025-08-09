@@ -16,7 +16,7 @@ class ChatSessions(Base):
     user_id = Column(UUID(as_uuid = True), nullable = False)
     title = Column(String(70), nullable=True)
     created_at = Column(DateTime, default = func.now())
-
+    updated_at = Column(DateTime, default = func.now())
     messages = relationship("ChatMessage", back_populates = "session", cascade = "all, delete-orphan")
 
 class ChatMessage(Base):

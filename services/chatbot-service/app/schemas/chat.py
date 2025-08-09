@@ -10,6 +10,7 @@ class ChatSessionCreate(BaseModel):
 class ChatSessionResponse(BaseModel):
     session_id: UUID4
     created_at: datetime
+    updated_at: datetime
 
 class ChatMessageCreate(BaseModel):
     sender: str

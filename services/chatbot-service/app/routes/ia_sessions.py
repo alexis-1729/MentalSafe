@@ -29,6 +29,9 @@ router = APIRouter(prefix = "/chat", tags = ["Sessions"])
 #         created_at = new_session.created_at
 #     )
 
+# @router.get("sessions/{user_id}", response_model = ChatSessionResponse)
+# def get
+
 #listar sessiones de user --no probado
 @router.get("/sessions/{user_id}", response_model = List[ChatSessionResponse])
 def list_chat_sessions(user_id: str, 
@@ -49,7 +52,8 @@ def list_chat_sessions(user_id: str,
     return[
         ChatSessionResponse(
             session_id = s.id_session,
-            created_at = s.created_at
+            created_at = s.created_at,
+            updated_at = s.updated_at
         )
         for s in sessions
     ]
