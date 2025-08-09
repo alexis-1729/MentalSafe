@@ -21,6 +21,11 @@ services:
       - "5436:5432"
     volumes:
       - auth-db-data:/var/lib/postgresql/data
+    
+    environment:
+      - POSTGRES_DB=authdb
+      - POSTGRES_USER=authuser
+      - POSTGRES_PASSWORD=authpass
     networks:
       - mentalnet
 
@@ -44,6 +49,11 @@ services:
       - "5435:5432"
     volumes:
       - chat-db-data:/var/lib/postgresql/data
+    
+    environment:
+      - POSTGRES_DB=chatdb
+      - POSTGRES_USER=chatuser
+      - POSTGRES_PASSWORD=chatpass
     networks:
       - mentalnet
 
@@ -73,6 +83,29 @@ services:
     - POSTGRES_PASSWORD=singer22
     networks:
       - mentalnet
+
+  # users-service:
+  #   build: 
+  #     context: ./services/users-service
+  #   container_name: users-service
+  #   ports:
+  #     - "8003:8003"
+  #   depends_on:
+  #     - users-db
+  #   env_file:
+  #     - ./services/users-service/.env
+  #   networks:
+  #     - mentalnet
+
+  # users-db:
+  #   image: postgres:14
+  #   container_name: users-db
+  #   ports:
+  #     - "5438:5432"
+  #   volumes:
+  #     - users-db-data:/var/lib/postgresql/data
+  #   networks:
+  #     - mentalnet
 
 volumes:
   auth-db-data:

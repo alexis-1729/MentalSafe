@@ -12,7 +12,7 @@ from app.models import type_test, result_test, test_user
 
 
 def recomendationTest(user_id: UUID4, db: Session)-> RecomendationResponse | None:
-    testUser = get_test_user_by_id(user_id)
+    testUser = get_test_user_by_userId(user_id, db)
 
     if testUser is None:
         test = db.query(type_test).first()

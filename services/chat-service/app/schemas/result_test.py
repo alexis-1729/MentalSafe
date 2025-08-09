@@ -9,7 +9,7 @@ class result_test_create(BaseModel):
 
 class result_test_response(BaseModel):
     result_id: UUID4
-    socre:int
+    score:int
     id_test:UUID4
 
     tag: Optional[tags_test_response] = None

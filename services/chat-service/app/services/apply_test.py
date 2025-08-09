@@ -4,40 +4,45 @@ from app.services.ia_engine import *
 
 user_sessions = {}
 
-def process_input(user_id, message, name: str)-> ScoreResponse:
+def process_input(user_id, message:str, name: str)-> ScoreResponse:
     session = user_sessions.get(user_id)
-
+    #--------------------------------------
     if not session:
-        test = get_test(message.lower())
+        test = get_test(name)
         if not test: 
-            return f"No existe"
+            return ScoreResponse( 
+                status= "error",
+                score= None,
+                description="El test '{name}' no existe."
+            )
         
         user_sessions[user_id]={
-            "test" : message.lower(),
+            "test" : name,
             "index" : 0,
             "answers" : []
         }
         
-        q = ask_question(message.lower(), 0)
+        q = ask_question(name, 0)
 
         options = "\n".join([f"{k}: {v}" for k, v in q["options"].items()])
 
+
         return ScoreResponse(
-            status= "Begin",
+            status= "begin",
             score= None,
-            description = f"Iniciando el test '{test['name']}'\n{q['text']}\n{options}"
+            description= f"Iniciando el test '{test['name']}'\n{q['text']}\n{options}"
         )
-         
+         #---------------------------------------
 
     try:
-        answer = int(message.strip())
-        session["answer"].append(answer)
+        answer = int(message)
+        session["answers"].append(answer)
     
     except ValueError:
         return ScoreResponse(
-            status = "Error",
-            score = None,
-            description = "Ingreso un valor incorrecto"
+            status= "error",
+            score= None,
+            description= "Ingreso un valor incorrecto por favor ingrese un valor del 0 al 3"
         )
     
     session["index"] += 1
@@ -47,16 +52,16 @@ def process_input(user_id, message, name: str)-> ScoreResponse:
     if next_q:
         options = "\n".join([f"{k}: {v}" for k, v in next_q["options"].items()])
         return ScoreResponse(
-            status = "Continue",
-            score = None,
-            description = f"{next_q['text']}\n{options}"
-        ) 
+            status= "continue",
+            score= None,
+            description= f"{next_q['text']}\n{options}"
+        )
     else:
         score = sum(session["answers"])
-        interpretacion = get_interpretation(session["test"], score)
+        interpretacion = interpret_score(session["test"], score)
         del user_sessions[user_id]
         return ScoreResponse(
-            status = "success",
-            score = score,
-            description = interpretacion
+            status= "success",
+            score= score,
+            description= interpretacion
         )

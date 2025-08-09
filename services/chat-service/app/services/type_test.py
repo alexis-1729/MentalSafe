@@ -18,3 +18,9 @@ def get_type_test_by_id(type_id: UUID4, db: Session)-> type_test_response | None
     if not result:
         return None
     return result
+
+def get_type_test_by_name(name: str, db: Session)-> type_test_response | None:
+    result = db.query(TypeTest).filter(TypeTest.name_test == name).first()
+    if not result:
+        return None
+    return result.typeT_id

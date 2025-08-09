@@ -1,5 +1,5 @@
 {
-  "beck": {
+  "Test de Depresion de Beck": {
     "name": "Test de Depresión de Beck",
     "questions": [
       {
@@ -31,10 +31,190 @@
           "2": "Cuando veo atrás, veo muchos fracasos",
           "3": "Me siento como un completo fracaso"
         }
+      },
+      {
+        "id": 4,
+        "text": "Estoy insatisfecho conmigo mismo",
+        "options": {
+          "0": "Estoy satisfecho conmigo mismo",
+          "1": "Estoy decepcionado de mí mismo",
+          "2": "No me gusto a mí mismo",
+          "3": "Me odio a mí mismo"
+        }
+      },
+      {
+        "id": 5,
+        "text": "Me siento culpable",
+        "options": {
+          "0": "No me siento especialmente culpable",
+          "1": "Me siento culpable gran parte del tiempo",
+          "2": "Me siento culpable la mayor parte del tiempo",
+          "3": "Me siento culpable todo el tiempo"
+        }
+      },
+      {
+        "id": 6,
+        "text": "Siento que merezco ser castigado",
+        "options": {
+          "0": "No siento que merezco ser castigado",
+          "1": "Siento que quizás merezco ser castigado",
+          "2": "Espero ser castigado",
+          "3": "Siento que merezco ser castigado"
+        }
+      },
+      {
+        "id": 7,
+        "text": "Me siento decepcionado de mí mismo",
+        "options": {
+          "0": "No me siento decepcionado de mí mismo",
+          "1": "Estoy decepcionado de mí mismo",
+          "2": "Estoy disgustado conmigo mismo",
+          "3": "Me odio"
+        }
+      },
+      {
+        "id": 8,
+        "text": "Me culpo por todo lo que sale mal",
+        "options": {
+          "0": "No me culpo más de lo habitual",
+          "1": "Me culpo más de lo habitual",
+          "2": "Me culpo por todo lo malo que sucede",
+          "3": "Me culpo por absolutamente todo"
+        }
+      },
+      {
+        "id": 9,
+        "text": "Tengo pensamientos suicidas",
+        "options": {
+          "0": "No tengo pensamientos de hacerme daño",
+          "1": "He tenido pensamientos de hacerme daño, pero no lo haría",
+          "2": "Preferiría morir",
+          "3": "Me haría daño si tuviera la oportunidad"
+        }
+      },
+      {
+        "id": 10,
+        "text": "Lloro con frecuencia",
+        "options": {
+          "0": "No lloro más de lo habitual",
+          "1": "Lloro más de lo habitual",
+          "2": "Lloro por cualquier cosa",
+          "3": "Siento ganas de llorar pero no puedo"
+        }
+      },
+      {
+        "id": 11,
+        "text": "Estoy irritable",
+        "options": {
+          "0": "No estoy más irritable de lo habitual",
+          "1": "Estoy más irritable que antes",
+          "2": "Estoy bastante irritable la mayor parte del tiempo",
+          "3": "Estoy irritable todo el tiempo"
+        }
+      },
+      {
+        "id": 12,
+        "text": "He perdido interés en otras personas",
+        "options": {
+          "0": "No he perdido el interés en otras personas",
+          "1": "Estoy menos interesado en las personas que antes",
+          "2": "He perdido gran parte de mi interés en las personas",
+          "3": "He perdido todo el interés en otras personas"
+        }
+      },
+      {
+        "id": 13,
+        "text": "Me resulta difícil tomar decisiones",
+        "options": {
+          "0": "Tomo decisiones tan bien como siempre",
+          "1": "Encuentro más difícil que antes tomar decisiones",
+          "2": "Tengo muchas dificultades para tomar decisiones",
+          "3": "No puedo tomar decisiones en absoluto"
+        }
+      },
+      {
+        "id": 14,
+        "text": "Siento que no valgo nada",
+        "options": {
+          "0": "No me siento menos valioso que los demás",
+          "1": "Me critico por mis debilidades o errores",
+          "2": "Siento que no valgo nada",
+          "3": "Me siento completamente inútil"
+        }
+      },
+      {
+        "id": 15,
+        "text": "Tengo menos energía que antes",
+        "options": {
+          "0": "Tengo tanta energía como siempre",
+          "1": "Tengo menos energía que antes",
+          "2": "No tengo suficiente energía para hacer muchas cosas",
+          "3": "No tengo energía para hacer nada"
+        }
+      },
+      {
+        "id": 16,
+        "text": "Tengo problemas para dormir",
+        "options": {
+          "0": "Duermo tan bien como siempre",
+          "1": "No duermo tan bien como antes",
+          "2": "Me despierto varias horas antes y no puedo volver a dormir",
+          "3": "Me despierto a menudo y me cuesta dormir"
+        }
+      },
+      {
+        "id": 17,
+        "text": "Estoy más irritable o impaciente",
+        "options": {
+          "0": "No estoy más irritable que de costumbre",
+          "1": "Estoy un poco más irritable que de costumbre",
+          "2": "Estoy bastante más irritable que antes",
+          "3": "Estoy extremadamente irritable todo el tiempo"
+        }
+      },
+      {
+        "id": 18,
+        "text": "He perdido el interés por las actividades",
+        "options": {
+          "0": "Sigo interesado en las actividades",
+          "1": "Me interesa menos que antes",
+          "2": "Me cuesta encontrar interés en las cosas",
+          "3": "No me interesa nada de lo que antes disfrutaba"
+        }
+      },
+      {
+        "id": 19,
+        "text": "Encuentro difícil concentrarme",
+        "options": {
+          "0": "Me concentro tan bien como siempre",
+          "1": "Me distraigo más fácilmente que antes",
+          "2": "Es difícil mantener mi atención en algo por mucho tiempo",
+          "3": "No puedo concentrarme en absoluto"
+        }
+      },
+      {
+        "id": 20,
+        "text": "Estoy más cansado(a) de lo normal",
+        "options": {
+          "0": "No me siento más cansado(a) que de costumbre",
+          "1": "Me canso más fácilmente que antes",
+          "2": "Estoy cansado(a) la mayor parte del tiempo",
+          "3": "Estoy demasiado cansado(a) para hacer cualquier cosa"
+        }
+      },
+      {
+        "id": 21,
+        "text": "He perdido el apetito",
+        "options": {
+          "0": "Mi apetito no ha cambiado",
+          "1": "Mi apetito es un poco menor",
+          "2": "Mi apetito es mucho menor",
+          "3": "No tengo apetito en absoluto"
+        }
       }
     ]
   },
-  "hamilton": {
+  "Test de Ansiedad de Hamilton": {
     "name": "Test de Ansiedad de Hamilton",
     "questions": [
       {
@@ -65,6 +245,116 @@
           "1": "Leves preocupaciones",
           "2": "Miedo evidente durante la entrevista",
           "3": "Temores persistentes que interfieren con la actividad"
+        }
+      },
+      {
+        "id": 4,
+        "text": "Insomnio",
+        "options": {
+          "0": "No hay dificultad para dormir",
+          "1": "Dificultad leve para conciliar el sueño o mantener el sueño",
+          "2": "Dificultad moderada, se despierta frecuentemente",
+          "3": "Insomnio severo, apenas duerme"
+        }
+      },
+      {
+        "id": 5,
+        "text": "Dificultad para concentrarse y recordar",
+        "options": {
+          "0": "Sin dificultad",
+          "1": "Leve dificultad para concentrarse",
+          "2": "Moderada dificultad para concentrarse o recordar",
+          "3": "Grave dificultad, interfiere con el funcionamiento"
+        }
+      },
+      {
+        "id": 6,
+        "text": "Estado de ánimo deprimido",
+        "options": {
+          "0": "Sin depresión",
+          "1": "Estado de ánimo deprimido leve",
+          "2": "Moderadamente deprimido",
+          "3": "Gravemente deprimido o desesperanzado"
+        }
+      },
+      {
+        "id": 7,
+        "text": "Síntomas somáticos (musculares)",
+        "options": {
+          "0": "Ausentes",
+          "1": "Leves: rigidez, dolor leve",
+          "2": "Moderados: tensión constante, dolores frecuentes",
+          "3": "Graves: incapacidad para relajarse, dolor intenso"
+        }
+      },
+      {
+        "id": 8,
+        "text": "Síntomas somáticos (sensoriales)",
+        "options": {
+          "0": "Ausentes",
+          "1": "Leves: sensación de hormigueo, entumecimiento ocasional",
+          "2": "Moderados: sensación constante de incomodidad sensorial",
+          "3": "Graves: sensaciones persistentes e incapacitantes"
+        }
+      },
+      {
+        "id": 9,
+        "text": "Síntomas cardiovasculares",
+        "options": {
+          "0": "Ausentes",
+          "1": "Leves: palpitaciones ocasionales",
+          "2": "Moderados: palpitaciones frecuentes, presión en el pecho",
+          "3": "Graves: dolor en el pecho, sensación de desmayo"
+        }
+      },
+      {
+        "id": 10,
+        "text": "Síntomas respiratorios",
+        "options": {
+          "0": "Ausentes",
+          "1": "Leves: sensación de falta de aire ocasional",
+          "2": "Moderados: respiración dificultosa frecuente",
+          "3": "Graves: sensación persistente de asfixia"
+        }
+      },
+      {
+        "id": 11,
+        "text": "Síntomas gastrointestinales",
+        "options": {
+          "0": "Ausentes",
+          "1": "Leves: náuseas ocasionales, molestias estomacales",
+          "2": "Moderados: diarrea, dolores frecuentes",
+          "3": "Graves: vómitos, dolor intenso, pérdida de apetito"
+        }
+      },
+      {
+        "id": 12,
+        "text": "Síntomas genitourinarios",
+        "options": {
+          "0": "Ausentes",
+          "1": "Leves: molestias urinarias ocasionales",
+          "2": "Moderados: frecuencia urinaria aumentada, molestias persistentes",
+          "3": "Graves: dolor intenso, dificultad para orinar"
+        }
+      },
+      {
+        "id": 13,
+        "text": "Síntomas autómicos generales",
+        "options": {
+          "0": "Ausentes",
+          "1": "Leves: sudoración ocasional, sequedad de boca",
+          "2": "Moderados: sudoración frecuente, palidez",
+          "3": "Graves: sudoración profusa, mareos frecuentes"
+        }
+      },
+      {
+        "id": 14,
+        "text": "Comportamiento en la entrevista",
+        "options": {
+          "0": "Normal",
+          "1": "Inquietud leve",
+          "2": "Inquietud notable, dificultad para mantenerse quieto",
+          "3": "Agitación severa, comportamiento inapropiado"
         }
       }
     ]

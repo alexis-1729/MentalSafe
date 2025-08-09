@@ -12,5 +12,5 @@ router = APIRouter(
 
 @router.post("/test/{user_id}", response_model = RecomendationResponse)
 def get_receomendation(user_id: UUID4, db: Session = Depends(get_db)):
-    return recomendation_test(user_id, db)
+    return recomendationTest(user_id, db)
     

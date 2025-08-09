@@ -6,12 +6,16 @@ from app.schemas.result_test import *
 from app.models import result_test as ResultTestModel
 
 
-def create_result_test(data: result_test_create, db: Session):
+def create_result_test(data: result_test_create, db: Session)-> result_test_response:
     new_result = ResultTestModel(**data.dict())
     db.add(new_result)
     db.commit()
     db.refresh(new_result)
-    return new_result
+    return result_test_response(
+        result_id= new_result.result_id, 
+        score= new_result.score,
+        id_test=new_result.id_test
+    )
 
 
 def get_result_id(result_id: UUID4, db: Session)-> result_test_response | None:
