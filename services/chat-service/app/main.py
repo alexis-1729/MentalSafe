@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAP
 from app.database import Base, engine
 from app.routes import tags_test, test_result, test_user, type_test,recomendation_test, apply_test
 
