@@ -107,10 +107,122 @@ services:
   #   networks:
   #     - mentalnet
 
+  course-service:
+    build:
+      context: ./services/course-service
+    container_name: course-service
+    ports:
+      - "8004:8004"
+    depends_on:
+      - course-db
+    env_file:
+      - ./services/course-service/.env
+    networks:
+      - mentalnet
+
+  course-db:
+    image: postgres:14
+    container_name: course-db
+    ports:
+      - "5439:5432"
+    volumes:
+      - course-db-data:/var/lib/postgresql/data
+    environment:
+    - POSTGRES_DB=coursedb
+    - POSTGRES_USER=courseU
+    - POSTGRES_PASSWORD=singer221s
+    networks:
+      - mentalnet
+
+  profesional-service:
+    build:
+      context: ./services/profesional-service
+    container_name: profesional-service
+    ports:
+      - "8005:8005"
+    depends_on:
+      - profesional-db
+    env_file:
+      - ./services/profesional-service/.env
+    networks:
+      - mentalnet
+
+  profesional-db:
+    image: postgres:14
+    container_name: profesional-db
+    ports:
+      - "5440:5432"
+    volumes:
+      - profesional-db-data:/var/lib/postgresql/data
+    environment:
+    - POSTGRES_DB=profesionaldb
+    - POSTGRES_USER=profesionalU
+    - POSTGRES_PASSWORD=singer223s
+    networks:
+      - mentalnet
+
+  chating-service:
+    build:
+      context: ./services/chating-service
+    container_name: chating-service
+    ports: 
+      - "8006:8006"
+    depends_on:
+      - chating-db
+    env_file:
+      - ./services/chating-service/.env
+    networks:
+      - mentalnet
+
+  chating-db:
+    image: postgres:14
+    container_name: chating-db
+    ports:
+      - "5441:5432"
+    volumes:
+      - chating-db-data:/var/lib/postgresql/data
+    environment:
+    - POSTGRES_DB=chatingdb
+    - POSTGRES_USER=chatinguser
+    - POSTGRES_PASSWORD=singe22llm
+    networks:
+      - mentalnet
+
+  notification-service:
+    build:
+      context: ./services/notification-service
+    container_name: notification-service
+    ports:
+      - "8007:8007"
+    depends_on:
+      - notification-db
+    env_file:
+      - ./services/notification-service/.env
+    networks:
+      - mentalnet
+  
+  notification-db:
+    image: postgres:14
+    container_name: notification-db
+    ports:
+      - "5442:5432"
+    volumes:
+      - notification-db-data:/var/lib/postgresql/data
+    environment:
+    - POSTGRES_DB=notificationdb
+    - POSTGRES_USER=notiuser
+    - POSTGRES_PASSWORD=singernoti22
+    networks:
+      - mentalnet
+
 volumes:
   auth-db-data:
   chat-db-data:
   chatbot-db-data:
+  course-db-data:
+  profesional-db-data:
+  chating-db-data:
+  notification-db-data:
 
 networks:
   mentalnet:
