@@ -3,10 +3,12 @@ import uuid
 
 class LoginForm(BaseModel):
     username: str
+    role: str
     password: str
 
 class Token (BaseModel):
     access_token: str
+    refresh_token: str
     token_type: str
 
 class UserAuthUpdate(BaseModel):
@@ -21,5 +23,5 @@ class TokenData(BaseModel):
     role: str | None = None
 
 class CurrentUser(BaseModel):
-    username: str
+    userid: str
     role: str

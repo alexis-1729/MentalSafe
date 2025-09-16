@@ -8,22 +8,51 @@ def login_user(form: LoginForm, db: Session):
     user = db.query(UserAuth).filter(UserAuth.username == form.username).first()
     if not user or not verify_password(form.password, user.password_h):
         raise HTTPException(status_code = 404, detail = "User not found")
-    token = create_acess_token({
-        "sub": user.username,
+    
+    access_token = create_acess_token({
+        "sub": user.id,
         "role": user.role})
-    return {"id":user.id,"acces_token": token, "token_type": "bearer"}
+    refresh_token = create_refresh_token({
+        "sub": user.id,
+        "role": user.role}, db)
+    
+    return {"acces_token": access_token,"refresh_token": refresh_token, "token_type": "bearer"}
 
+# ·agregar el acces_token y refresh y enviar el user_id
 def register_user(form: LoginForm, db: Session):
     user = db.query(UserAuth).filter(UserAuth.username == form.username).first()
     if user:
         raise HTTPException(status_code = 404, detail = "user alredy exist")
     hashed = get_password_hash(form.password)
-    user = UserAuth(username = form.username, password_h = hashed)
+    user = UserAuth(username = form.username, password_h = hashed, role = form.role)
 
     db.add(user)
     db.commit()
     db.refresh(user)
-    return {"msg": "User created", "username": user.username}
+
+    access_token = create_acess_token({
+        "sub": user.id,
+        "role": form.role})
+    
+    refresh_token = create_refresh_token({
+        "sub": user.id,
+        "role": form.role}, db)
+
+    return {"acces_token": access_token,"refresh_token": refresh_token, "token_type": "bearer"}
+
+def logout(refresh_token: str, db: Session):
+    try:
+        payload = jwt.decode(refresh_token, os.getenv("SECRET_KEY"), algorithms=os.getenv("ALGORITHM"))
+        jti = payload.get("jti")
+        token = db.query(token_auth).filter(token_auth.jti == jti).first()
+        
+        if not token:
+            raise HTTPException(status_code = 401, detail = "Not found token")
+
+        db.delete(token)
+        db.commit()
+    except JWTError:
+        raise HTTPException(status_code = 401, detail = "Token invalido")
 
 def get_user(db: Session, username: str)-> UserAuth | None:
     user = db.query(UserAuth).filter(UserAuth.username == username).first()
