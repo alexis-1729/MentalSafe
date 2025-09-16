@@ -3,6 +3,8 @@ from app.schemas.chat import *
 from sqlalchemy.orm import Session
 from app.services.ia_sessions import *
 from app.services.ia_messages import *
+from app.services.security import verify_access_token
+from app.schemas.security import TokenData
 from app.database import get_db
 import uuid
 from datetime import datetime, timedelta
@@ -15,7 +17,11 @@ router = APIRouter(
 TIMEOUT = 30
 
 @router.post("/{user_id}")
-def init_chat(user_id: str, data: ChatMessageCreate,db: Session = Depends(get_db)):
+def init_chat(
+    user_id: str, 
+    data: ChatMessageCreate,
+    db: Session = Depends(get_db),
+    token_data: TokenData = Depends(verify_access_token)):
      #obtener hora actual 
     now = datetime.utcnow()
 
