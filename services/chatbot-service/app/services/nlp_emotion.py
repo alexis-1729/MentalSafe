@@ -6,10 +6,10 @@ from preprocess import proccess
 from keras.models import load_model 
 
 def analisis(line: str):
-    encoder = pickle.load(open('nlp/encoder.pkl', 'rb'))
-    cv = pickle.load(open('nlp/CountVectorizer.pkl'))
+    encoder = pickle.load(open('./nlp/encoder.pkl', 'rb'))
+    cv = pickle.load(open('./nlp/CountVectorizer.pkl'))
 
-    model = load_model('my_model.h5')
+    model = load_model('./nlp/my_model.h5')
     intput = proccess(line)
 
     array = cv.transform([input]).toarray()
