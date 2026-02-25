@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   auth-service:
     build:
@@ -29,10 +27,10 @@ services:
     networks:
       - mentalnet
 
-  chatbot-service:
+  test-service:
     build:
-      context: ./services/chatbot-service
-    container_name: chatbot-service
+      context: ./services/test-service
+    container_name: test-service
     ports:
       - "8001:8001"
     depends_on:
@@ -42,44 +40,44 @@ services:
     networks:
       - mentalnet
 
-  chat-db:
+  test-db:
     image: postgres:14
-    container_name: chat-db
+    container_name: test-db
     ports:
       - "5435:5432"
     volumes:
-      - chat-db-data:/var/lib/postgresql/data
+      - test-db-data:/var/lib/postgresql/data
     
     environment:
-      - POSTGRES_DB=chatdb
-      - POSTGRES_USER=chatuser
-      - POSTGRES_PASSWORD=chatpass
+      - POSTGRES_DB=testdb
+      - POSTGRES_USER=testuser
+      - POSTGRES_PASSWORD=testpass
     networks:
       - mentalnet
 
-  chat-service:
+  ia-service:
     build:
-      context: ./services/chat-service
-    container_name: chat-service
+      context: ./services/ia-service
+    container_name: ia-service
     ports:
       - "8002:8002"
     depends_on:
-      - chatbot-db
+      - ia-db
     env_file:
-      - ./services/chat-service/.env
+      - ./services/ia-service/.env
     networks:
       - mentalnet
 
-  chatbot-db:
+  ia-db:
     image: postgres:14
-    container_name: chatbot-db
+    container_name: ia-db
     ports:
       - "5437:5432"
     volumes:
-      - chatbot-db-data:/var/lib/postgresql/data
+      - ia-db-data:/var/lib/postgresql/data
     environment:
-    - POSTGRES_DB=chatbotdb
-    - POSTGRES_USER=chatbotuser
+    - POSTGRES_DB=iadb
+    - POSTGRES_USER=iauser
     - POSTGRES_PASSWORD=singer22
     networks:
       - mentalnet
@@ -217,8 +215,8 @@ services:
 
 volumes:
   auth-db-data:
-  chat-db-data:
-  chatbot-db-data:
+  ia-db-data:
+  test-db-data:
   course-db-data:
   profesional-db-data:
   chating-db-data:
