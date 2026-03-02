@@ -9,3 +9,6 @@ class InvalidPassword(DomainError):
 
 class RegisterNotExist(DomainError):
     pass
+
+class InvalidCredentials(DomainError):
+    pass

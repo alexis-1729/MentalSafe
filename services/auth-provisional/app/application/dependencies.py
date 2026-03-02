@@ -13,3 +13,6 @@ def get_auth_service(
                 hasher= BcryptPasswordHasher(),
                 token_service= JWTTokenService()
                 )
+def get_refresh_token_service(
+        uow: AbstractUnitOfWork = Depends(get_)
+)
