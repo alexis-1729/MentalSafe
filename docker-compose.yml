@@ -1,20 +1,20 @@
 services:
-  auth-service:
+  authservice:
     build:
       context: ./services/auth-service
-    container_name: auth-service
+    container_name: authservice
     ports:
       - "8000:8000"
     depends_on:
-      - auth-db
+      - authdb
     env_file:
       - ./services/auth-service/.env
     networks:
       - mentalnet
 
-  auth-db:
+  authdb:
     image: postgres:14
-    container_name: auth-db
+    container_name: authdb
     ports:
       - "5436:5432"
     volumes:
@@ -22,8 +22,8 @@ services:
     
     environment:
       - POSTGRES_DB=authdb
-      - POSTGRES_USER=authuser
-      - POSTGRES_PASSWORD=authpass
+      - POSTGRES_USER=alexis1729
+      - POSTGRES_PASSWORD=Singer22jkM
     networks:
       - mentalnet
 
@@ -34,9 +34,9 @@ services:
     ports:
       - "8001:8001"
     depends_on:
-      - chat-db
+      - test-db
     env_file:
-      - ./services/chatbot-service/.env
+      - ./services/test-service/.env
     networks:
       - mentalnet
 
