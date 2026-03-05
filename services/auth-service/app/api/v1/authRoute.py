@@ -32,7 +32,7 @@ async def createUser(
             detail = "User alredy exists"
         )
     
-@router.get("{user_id}", response_model = UserResponse)
+@router.get("/{user_id}", response_model = UserResponse)
 async def login(
     data: UserLogin,
     service: AuthService = Depends(get_auth_service)

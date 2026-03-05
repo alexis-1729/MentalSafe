@@ -1,49 +1,32 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
-from sqlalchemy.sql import func
-from sqlalchemy.orm import relationship
+
+
+
+from sqlalchemy import Column, String, DateTime, Enum, ForeignKey, Text
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import declarative_base, relationship
 import uuid
-from .database import Base
+from sqlalchemy.sql import func
+from datetime import datetime
+Base = declarative_base()
 
-class test_user(Base):
-    __tablename__ = "test_user"
-    test_id = Column(UUID(as_uuid = True), primary_key = True, default = uuid.uuid4)
-    id_user = Column(UUID(as_uuid = True), nullable =False)
-    result_id= Column(UUID(as_uuid = True), ForeignKey("test_results.result_id", ondelete = "CASCADE"), nullable = False)
-    created_at = Column(DateTime(timezone = True), server_default = func.now())
+class ChatSessions(Base):
+    __tablename__ = "chat_sessions"
+  
+    id_session = Column(UUID(as_uuid=True), primary_key=True, default = uuid.uuid4)
+    user_id = Column(UUID(as_uuid = True), nullable = False)
+    title = Column(String(70), nullable=True)
+    created_at = Column(DateTime, default = func.now())
+    updated_at = Column(DateTime, default = func.now())
+    messages = relationship("ChatMessage", back_populates = "session", cascade = "all, delete-orphan")
 
-    result = relationship("result_test", back_populates = "test_users")
+class ChatMessage(Base):
+    __tablename__ = "chat_message"
 
-class tags_test(Base):
-    __tablename__ = "tag_test"
-    tag_id = Column(UUID(as_uuid = True), primary_key = True, default = uuid.uuid4)
-    name = Column(String, nullable = False)
-    id_test_type = Column(UUID(as_uuid =  True), ForeignKey("type_test.typeT_id", ondelete = "CASCADE"), nullable = False)
+    id_message = Column(UUID(as_uuid = True), primary_key = True, default = uuid.uuid4)
+    session_id = Column(UUID(as_uuid = True), ForeignKey("chat_sessions.id_session"), nullable = False)
+    sender = Column(String(30), nullable = True)
+    message = Column(Text, nullable = False)
+    emotion_tag = Column(String(70), nullable = False)
+    created_at = Column(DateTime, default = func.now())
 
-    #relacion 
-    type = relationship("type_test", back_populates = "tags")
-    
-    #relacion inversa
-
-class type_test(Base):
-    __tablename__ = "type_test"
-    typeT_id = Column(UUID(as_uuid = True), primary_key = True, default = uuid.uuid4)
-    name_test = Column(String, nullable = False)
-    num_q = Column(Integer, nullable = False)
-    
-    results = relationship("result_test", back_populates = "test", cascade = "all, delete")
-
-    #relacion
-    tags = relationship("tags_test", back_populates = "type", cascade = "all, delete")
-
-class result_test(Base):
-    __tablename__ = "test_results"
-    result_id = Column(UUID(as_uuid = True), primary_key = True, default = uuid.uuid4)
-    score = Column(Integer, nullable = False)
-    #id_tag = Column(UUID(as_uuid = True), ForeignKey("tag_test.tag_id", ondelete = "CASCADE"), nullable = False)
-    id_test = Column(UUID(as_uuid = True), ForeignKey("type_test.typeT_id", ondelete ="CASCADE"), nullable = False)
-    test = relationship("type_test", back_populates = "results")
-
-    #relacion inversa
-    test_users = relationship("test_user", back_populates = "result", cascade = "all, delete")
-
+    session = relationship("ChatSessions", back_populates = "messages")
