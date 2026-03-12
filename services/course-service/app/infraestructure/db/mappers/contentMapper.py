@@ -8,7 +8,7 @@ class ContentMapper:
     @staticmethod
     def to_domain(orm: ContentORM)-> Content:
         return Content(
-            id_content= orm.content,
+            id_content= orm.id_content,
             content= orm.content,
             url_video= orm.url_video,
             complete= orm.complete,
