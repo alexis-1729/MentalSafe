@@ -1,12 +1,13 @@
 from fastapi import FastAPI
-from .database import  Base, engine
-from app.routes import course
+from app.api.routers import router
+from app.infraestructure.database import Base, engine
 
-
-Base.metadata.create_all(bind = engine)
 
 app = FastAPI()
 
-app.include_router(course.router)
+@app.on_Event("statrup")
+async def on_startup():
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
 
- 
+app.include_router(router)
