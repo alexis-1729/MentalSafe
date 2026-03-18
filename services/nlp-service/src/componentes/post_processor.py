@@ -1,0 +1,19 @@
+
+import torch
+class PostProcessor:
+
+    def __init__(self) -> None:
+        self.labels = {
+            0: "enojo",
+            1: "miedo",
+            2: "alegria",
+            3: "amor",
+            4: "tristeza",
+            5: "sorpresa"
+        }
+
+    def format(self, outputs):
+        logits = outputs.logits
+        prediction =torch.argmax(logits, dim = 1).item()
+
+        return self.labels[prediction]
