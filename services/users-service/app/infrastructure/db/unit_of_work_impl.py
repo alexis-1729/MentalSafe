@@ -1,16 +1,14 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
+from app.domain.unit_of_work import AbstractUnitOfWork
 from app.infrastructure.db.repositories.user_repository_impl import UserRepositoryImpl
 
-class UnitOfWorkImpl:
-    def __init__(self, session: Session):
+class UnitOfWorkImpl(AbstractUnitOfWork):
+    def __init__(self, session: AsyncSession):
         self.session = session
         self.users = UserRepositoryImpl(session)
 
-    def __enter__(self):
-        return self
+    async def commit(self):
+        await self.session.commit()
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        if exc_type is None:
-            self.session.commit()
-        else:
-            self.session.rollback()
+    async def rollback(self):
+        await self.session.rollback()

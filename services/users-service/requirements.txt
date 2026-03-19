@@ -3,5 +3,7 @@ uvicorn
 python-dotenv
 sqlalchemy
 psycopg2-binary
+pydantic[email]
+asyncpg
 
 #agregue ya unas dependencias necesarias
