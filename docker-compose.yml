@@ -82,28 +82,32 @@ services:
     networks:
       - mentalnet
 
-  # users-service:
-  #   build: 
-  #     context: ./services/users-service
-  #   container_name: users-service
-  #   ports:
-  #     - "8003:8003"
-  #   depends_on:
-  #     - users-db
-  #   env_file:
-  #     - ./services/users-service/.env
-  #   networks:
-  #     - mentalnet
+  users-service:
+    build: 
+      context: ./services/users-service
+    container_name: users-service
+    ports:
+      - "8003:8003"
+    depends_on:
+      - usersdb
+    env_file:
+      - ./services/users-service/.env
+    networks:
+      - mentalnet
 
-  # users-db:
-  #   image: postgres:14
-  #   container_name: users-db
-  #   ports:
-  #     - "5438:5432"
-  #   volumes:
-  #     - users-db-data:/var/lib/postgresql/data
-  #   networks:
-  #     - mentalnet
+  usersdb:
+    image: postgres:14
+    container_name: usersdb
+    ports:
+      - "5438:5432"
+    volumes:
+      - users-db-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=usersdb
+      - POSTGRES_USER=alexis1729
+      - POSTGRES_PASSWORD=Singer22jkM
+    networks:
+      - mentalnet
 
   course-service:
     build:
@@ -215,6 +219,7 @@ services:
 
 volumes:
   auth-db-data:
+  users-db-data:
   ia-db-data:
   test-db-data:
   course-db-data:

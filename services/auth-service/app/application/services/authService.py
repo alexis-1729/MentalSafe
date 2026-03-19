@@ -14,7 +14,7 @@ class AuthService:
             token_service: TokenService
             ):
                 self.uow = uow
-                self.hasher = hasher,
+                self.hasher = hasher
                 self.token_service = token_service
 
     async def register(self, email: str, password_h: str, role: str):
@@ -49,7 +49,8 @@ class AuthService:
             access = self.token_service.generate_access(user.id)
             refresh = self.token_service.generate_refresh(user.id)
 
+            
             return {
-                 "access_token": access,
+                 "access_token": user.id,
                  "refresh_token": refresh
             }

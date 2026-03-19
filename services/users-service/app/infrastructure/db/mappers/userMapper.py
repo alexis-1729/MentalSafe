@@ -3,14 +3,15 @@ from app.infrastructure.db.models.userModel import UserModel
 
 class UserMapper:
     @staticmethod
-    def to_entity(model: UserModel) -> User:
+    def to_entity(model: UserModel) -> User | None:
         if not model: return None
         return User(
             id=model.id,
-            username=model.username,
-            email=model.email,
-            password=model.password,
+            id_auth= model.id_auth,
             full_name=model.full_name,
+            apellidos= model.apellidos,
+            fecha_nac= model.fecha_nac,
+            genero = model.genero,
             created_at=model.created_at,
             updated_at=model.updated_at
         )
@@ -19,8 +20,12 @@ class UserMapper:
     def to_model(entity: User) -> UserModel:
         return UserModel(
             id=entity.id,
-            username=entity.username,
-            email=entity.email,
-            password=entity.password,
-            full_name=entity.full_name
+            id_auth = entity.id_auth,
+            full_name=entity.full_name,
+            apellidos = entity.apellidos,
+            fecha_nac = entity.fecha_nac,
+            genero = entity.genero,
+            created_at = entity.created_at,
+            updated_at = entity.updated_at
+
         )
