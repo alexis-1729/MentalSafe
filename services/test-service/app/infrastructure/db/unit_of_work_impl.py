@@ -1,16 +1,35 @@
-from sqlalchemy.orm import Session
-from app.infrastructure.db.repositories.chat_repository_impl import ChatRepositoryImpl
+from sqlalchemy.ext.asyncio import AsyncSession
+from app.domain.unit_of_work import IUnitOfWork
+from app.infrastructure.db.repositories import (
+    TypeTestRepository,
+    ResultTestRepository,
+    TagTestRepository,
+    TestUserRepository,
+)
 
-class UnitOfWorkImpl:
-    def __init__(self, session: Session):
+
+class UnitOfWorkImpl(IUnitOfWork):
+    """Implementación del Unit of Work para de la infraestructura"""
+
+    def __init__(self, session: AsyncSession):
         self.session = session
-        self.chats = ChatRepositoryImpl(session)
+        self.type_test = TypeTestRepository(session)
+        self.result_test = ResultTestRepository(session)
+        self.tag_test = TagTestRepository(session)
+        self.test_user = TestUserRepository(session)
 
-    def __enter__(self):
-        return self
+    async def begin(self) -> None:
+        """Inicia una transacción"""
+        await self.session.begin()
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        if exc_type is None:
-            self.session.commit()
-        else:
-            self.session.rollback()
+    async def commit(self) -> None:
+        """Confirma la transacción"""
+        await self.session.commit()
+
+    async def rollback(self) -> None:
+        """Revierte la transacción"""
+        await self.session.rollback()
+
+    async def close(self) -> None:
+        """Cierra la conexión"""
+        await self.session.close()
