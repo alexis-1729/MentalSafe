@@ -1,20 +1,19 @@
-from fastapi import FastAP
-from app.database import Base, engine
-from app.routes import tags_test, test_result, test_user, type_test,recomendation_test, apply_test
+from fastapi import FastAPI
+from app.infrastructure.db.database import engine, Base
+from app.api.v1.test_user_route import router as test_user_router
 
-
-
-from app.models import *
-#Inicializar clave de API de Google
-#Crear las tablas
+# Crea las tablas en la base de datos (SQLite en este caso)
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI()
+app = FastAPI(
+    title="Test Service - Clean Architecture",
+    description="Microservicio para la gestión de tests y resultados",
+    version="1.0.0"
+)
 
+# Registro de rutas
+app.include_router(test_user_router, prefix="/api/v1/tests", tags=["Tests"])
 
-app.include_router(tags_test.router)
-app.include_router(apply_test.router)
-app.include_router(test_user.router)
-app.include_router(test_result.router)
-app.include_router(type_test.router)
-app.include_router(recomendation_test.router)
+@app.get("/")
+def read_root():
+    return {"message": "Test Service is running"}

@@ -28,17 +28,16 @@ services:
       - mentalnet
 
   test-service:
-    build:
-      context: ./services/test-service
-    container_name: test-service
+    build: ./test-service
+    container_name: test_container
     ports:
-      - "8001:8001"
+      - "8002:8000"  
+    volumes:
+      - ./test-service:/app
+    environment:
+      - DATABASE_URL=sqlite:///./test_service.db
     depends_on:
-      - test-db
-    env_file:
-      - ./services/test-service/.env
-    networks:
-      - mentalnet
+      - users-service
 
   test-db:
     image: postgres:14
@@ -83,17 +82,17 @@ services:
       - mentalnet
 
   users-service:
-    build: 
-      context: ./services/users-service
-    container_name: users-service
+    build:
+      context: ./users-service 
+      dockerfile: Dockerfile
+    container_name: users_container
     ports:
-      - "8003:8003"
-    depends_on:
-      - usersdb
-    env_file:
-      - ./services/users-service/.env
-    networks:
-      - mentalnet
+      - "8001:8000"  
+    volumes:
+      - ./users-service:/app  
+    environment:
+      - DATABASE_URL=sqlite:///./users.db
+    restart: always
 
   usersdb:
     image: postgres:14

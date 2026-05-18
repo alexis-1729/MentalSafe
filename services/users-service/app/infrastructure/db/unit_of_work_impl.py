@@ -1,14 +1,22 @@
-from sqlalchemy.ext.asyncio import AsyncSession
-from app.domain.unit_of_work import AbstractUnitOfWork
+from sqlalchemy.orm import Session
+from app.infrastructure.db.database import SessionLocal
 from app.infrastructure.db.repositories.user_repository_impl import UserRepositoryImpl
 
-class UnitOfWorkImpl(AbstractUnitOfWork):
-    def __init__(self, session: AsyncSession):
-        self.session = session
-        self.users = UserRepositoryImpl(session)
+class UnitOfWorkImpl:
+    def __init__(self, session: Session = None):
+        # Si no se pasa una sesión, se crea una nueva desde SessionLocal
+        self.session = session if session else SessionLocal()
+        # Aquí se inyectan todos los repositorios del microservicio
+        self.users = UserRepositoryImpl(self.session)
 
-    async def commit(self):
-        await self.session.commit()
+    def __enter__(self):
+        return self
 
-    async def rollback(self):
-        await self.session.rollback()
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        try:
+            if exc_type is None:
+                self.session.commit()
+            else:
+                self.session.rollback()
+        finally:
+            self.session.close()

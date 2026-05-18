@@ -1,9 +1,11 @@
 from fastapi import Depends
-from sqlalchemy.ext.asyncio import AsyncSession
-from app.infrastructure.database import get_db
+from sqlalchemy.orm import Session
+from app.infrastructure.db.database import get_db
 from app.infrastructure.db.unit_of_work_impl import UnitOfWorkImpl
-from app.application.services.userService import UserService
+from app.application.services.user_service import UserService
 
-async def get_user_service(db: AsyncSession = Depends(get_db)):
-    uow = UnitOfWorkImpl(db)
+def get_unit_of_work(db: Session = Depends(get_db)):
+    return UnitOfWorkImpl(db)
+
+def get_user_service(uow: UnitOfWorkImpl = Depends(get_unit_of_work)):
     return UserService(uow)
