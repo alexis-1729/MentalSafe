@@ -18,6 +18,7 @@ class SQLAlchemyAuthRepository(AuthRepository):
         try:
             orm_auth = AuthMapper.to_orm(auth)
             self.session.add(orm_auth)
+            await self.session.flush()
         except IntegrityError:
             raise UserAlredyExists()
     

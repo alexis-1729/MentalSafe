@@ -9,7 +9,7 @@ class SQLAlchemyUnitOfWork(AbstractUnitOfWork):
         self.session = self.session_factory()
         self.auth = SQLAlchemyAuthRepository(self.session)
         self.refresh_tokens = SQLAlchemyRefreshTokenRepository(self.session)
-        return await super().__aenter__()
+        return self
     
     async def __aexit__(self, *args):
         await super().__aexit__(*args)
@@ -19,4 +19,4 @@ class SQLAlchemyUnitOfWork(AbstractUnitOfWork):
         await self.session.commit()
 
     async def rollback(self):
-        await self.session().rollback()
+        await self.session.rollback()
