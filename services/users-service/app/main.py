@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from app.api.routers import api_router
-from app.infrastructure.database import engine, Base
+from app.infrastructure.db.database import engine, Base
 
 app = FastAPI(title="Users Microservice")
 

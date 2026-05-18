@@ -1,4 +1,2 @@
-from .typeTestModel import TypeTestModel
-from .tagTestModel import TagTestModel
-from .resultTestModel import ResultTestModel
-from .testUserModel import TestUserModel
+# Los modelos se importan directamente desde sus módulos en las aplicaciones
+# que los necesitan, no desde aquí para evitar importaciones circulares

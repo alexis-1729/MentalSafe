@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, status, HTTPException
 from uuid import UUID
 from app.api.schemas.userSchemas import UserCreate, UserResponse
 from app.application.dependencies import get_user_service
-from app.application.services.userService import UserService
+from app.application.services.user_service import UserService
 from app.domain.exceptions import UserNotFound
 
 router = APIRouter()

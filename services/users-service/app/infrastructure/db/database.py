@@ -5,7 +5,7 @@ import os
 
 load_dotenv()
 
-DATABASE_URL = f"postgresql+asyncpg://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql+asyncpg://alexis1729:Singer22jkM@usersdb:5432/usersdb")
 
 engine = create_async_engine(
     DATABASE_URL,

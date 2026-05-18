@@ -4,3 +4,4 @@ python-dotenv
 psycopg2-binary
 sqlalchemy
 google-generativeai
+asyncpg
