@@ -2,7 +2,7 @@ import uuid
 from sqlalchemy import Column, Integer, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import UUID
-from app.infrastructure.db.database import Base
+from app.infrastructure.database import Base
 
 class ResultTestModel(Base):
     __tablename__ = "test_results"

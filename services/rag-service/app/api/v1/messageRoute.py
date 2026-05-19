@@ -1,7 +1,8 @@
 from fastapi import APIRouter, HTTPException, Depends
 from app.api.schemas.messageSchemas import ChatMessageCreate, ChatMessageResponse
 from app.application.services.messageService import MessageService
-from app.application.dependencies import get_message_service
+from app.application.pipeline.flow import Pipeline
+from app.application.dependencies import get_message_service, get_pipeline
 from uuid import UUID
 
 router = APIRouter()
@@ -10,22 +11,38 @@ router = APIRouter()
 @router.post("/", response_model=ChatMessageResponse)
 async def create_message(
     data: ChatMessageCreate,
-    service: MessageService = Depends(get_message_service)
+    service: MessageService = Depends(get_message_service),
+    pipeline: Pipeline = Depends(get_pipeline)
 ):
     try:
-        message = await service.create_message(
+
+
+        #---------------- Mensaje usuario -------
+
+        await service.create_message(
             session_id=data.session_id,
             sender=data.sender,
             message=data.message,
-            emotion_tag=data.emotion_tag
+            emotion_tag= "gg"
         )
+
+
+        response = pipeline.pipeline(data.message)
+
+        message = service.create_message(
+            session_id= data.session_id,
+            sender = "IA",
+            message = response,
+            emotion_tag = "gg"
+        )
+
 
         return ChatMessageResponse(
             id_message=message.id_message,
-            session_id=message.session_id,
-            sender=message.sender,
+            session_id=data.session_id,
+            sender="IA",
             content=message.message,
-            created_at=message.created_at
+            created_at= message.created_at
         )
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Error creating message: {str(e)}")

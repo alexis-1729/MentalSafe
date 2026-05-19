@@ -2,11 +2,11 @@ from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from .componentes.pre_processor import PreProcessor
 from .componentes.predictor import ModelPredictor
-from src.api.routers import api_v1_router
+from .api.routers import api_v1_router
 import logging
 
 logging.basicConfig(level = logging.INFO)
-logger = logging.getLogger("ggpap")
+logger = logging.getLogger("ggpapa")
 
 transformer = PreProcessor()
 predictor = ModelPredictor()
@@ -18,6 +18,9 @@ async def lifespan(app: FastAPI):
     try:
         predictor.load_model()
         transformer.load_scaler()
+
+        app.state.predictor = predictor
+        app.state.transformer = transformer
         logger.info("Modelo y Scales cargados")
     except Exception as e:
         logger.error(f"Error en el inicio: {e}")

@@ -7,7 +7,6 @@ class ChatMessageCreate(BaseModel):
     session_id: UUID
     sender: str
     message: str
-    emotion_tag: str
     created_at: datetime
 
     class Config:

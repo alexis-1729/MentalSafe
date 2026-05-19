@@ -1,31 +1,28 @@
-from fastapi import APIRouter, HTTPException
-from src.api.schemas.inputSchema import Input, Output
-from src.componentes.post_processor import PostProcessor
-from src.componentes.pre_processor import PreProcessor
-from src.componentes.predictor import ModelPredictor
+from fastapi import APIRouter, HTTPException, Request
+from ..schemas.inputSchema import Input, Output
+from ...componentes.post_processor import PostProcessor
 
 router = APIRouter()
 refiner = PostProcessor()
-transformer = PreProcessor()
-predictor = ModelPredictor()
 
-@router.post("predict")
 
-def prediction(text: Input):
+@router.post("/predict")
+
+def prediction(request: Request, text: Input):
     try:
-        features = transformer.preprocess(text)
+        transformer = request.app.state.transformer
+        predictor = request.app.state.predictor
+        features = transformer.preprocess(text.text)
 
         prediction_raw = predictor.predict(features)
 
         result = refiner.format(prediction_raw)
 
-        ans = Output(
-            sentiment = result
-        )
+       
 
-        return ans
+        return result
     except ValueError as ve:
         raise HTTPException(status_code = 404, detail = str(ve))
     
     except Exception as e:
-        raise HTTPException(status_code = 500,detail = "Internal error")
+        raise HTTPException(status_code = 500, detail = str(e))

@@ -5,7 +5,7 @@ from app.infraestructure.db.unit_of_work import SQLAlchemyUnitOfWork
 from app.domain.unit_of_work import UnitOfWork
 from app.application.services.messageService import MessageService
 from app.application.services.sessionService import SessionService
-
+from app.application.pipeline.flow import Pipeline
 
 # Dependencia para UoW
 async def get_uow_dependency(
@@ -29,3 +29,5 @@ async def get_session_service(
     """Obtener instancia del servicio de sesiones"""
     return SessionService(uow)
 
+async def get_pipeline()->Pipeline:
+    return Pipeline("Mental")

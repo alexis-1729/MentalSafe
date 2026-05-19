@@ -56,26 +56,26 @@ services:
     networks:
       - mentalnet
 
-  ia-service:
+  rag-service:
     build:
-      context: ./services/ia-service
-    container_name: ia-service
+      context: ./services/rag-service
+    container_name: rag-service
     ports:
       - "8002:8002"
     depends_on:
-      - ia-db
+      - rag-db
     env_file:
-      - ./services/ia-service/.env
+      - ./services/rag-service/.env
     networks:
       - mentalnet
 
-  ia-db:
+  rag-db:
     image: postgres:14
-    container_name: ia-db
+    container_name: rag-db
     ports:
       - "5437:5432"
     volumes:
-      - ia-db-data:/var/lib/postgresql/data
+      - rag-db-data:/var/lib/postgresql/data
     environment:
     - POSTGRES_DB=iadb
     - POSTGRES_USER=iauser
@@ -222,10 +222,40 @@ services:
     networks:
       - mentalnet
 
+  nlp-service:
+    build: 
+      context: ./services/nlp-service
+    container_name: nlp-service
+    ports:
+      - "8008:8008"
+    networks:
+      - mentalnet
+  
+  llm-service:
+    build:
+      context: ./services/llm-service
+    container_name: llm-service
+    ports: 
+      - "8009:8009"
+    env_file:
+      - ./services/llm-service/.env
+    networks:
+      - mentalnet
+  
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: qdrant_local
+    ports:
+      - "6333:6333"
+    volumes:
+      - ./qdrant_storage:/qdrant/storage:z
+    environment:
+      - QDRANT__SERVICE__ENABLE_STATIC_CONTENT=true 
+
 volumes:
   auth-db-data:
   users-db-data:
-  ia-db-data:
+  rag-db-data:
   test-db-data:
   course-db-data:
   profesional-db-data:

@@ -8,6 +8,6 @@ class ChatSessionCreate(BaseModel):
     title:Optional[str] = None
 
 class ChatSessionResponse(BaseModel):
-    session_id: UUID
-    created_at: datetime
-    updated_at: datetime
+    session_id: Optional[UUID] = None
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None

@@ -1,5 +1,6 @@
 
 import torch
+import logging
 class PostProcessor:
 
     def __init__(self) -> None:
@@ -11,9 +12,13 @@ class PostProcessor:
             4: "tristeza",
             5: "sorpresa"
         }
+        self.logger = logging.getLogger("post")
 
     def format(self, outputs):
-        logits = outputs.logits
-        prediction =torch.argmax(logits, dim = 1).item()
+        try:
+            logits = outputs.logits
+            prediction =torch.argmax(logits, dim = 1).item()
 
-        return self.labels[prediction]
+            return self.labels[prediction]
+        except Exception as e:
+            self.logger.error(f"Error: {e}")

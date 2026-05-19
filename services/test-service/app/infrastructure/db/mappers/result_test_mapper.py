@@ -6,7 +6,7 @@ class ResultTestMapper:
     """Mapper para convertir ResultTestModel a ResultTestEntity y viceversa"""
 
     @staticmethod
-    def to_entity(model: ResultTestModel) -> ResultTestEntity:
+    def to_entity(model: ResultTestModel) -> ResultTestEntity | None:
         """Convierte un modelo SQLAlchemy a una entidad de dominio"""
         if not model:
             return None
