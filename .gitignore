@@ -1,3 +1,4 @@
 .env
 mentalsafe-e5d9f-firebase-adminsdk-fbsvc-1214c49c88.json
 *.pyc
+/qdrant_storage
