@@ -77,9 +77,9 @@ services:
     volumes:
       - rag-db-data:/var/lib/postgresql/data
     environment:
-    - POSTGRES_DB=iadb
-    - POSTGRES_USER=iauser
-    - POSTGRES_PASSWORD=singer22
+    - POSTGRES_DB=sessiondb
+    - POSTGRES_USER=alexis1729
+    - POSTGRES_PASSWORD=Singer22jkM
     networks:
       - mentalnet
 

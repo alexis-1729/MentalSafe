@@ -8,7 +8,7 @@ app = FastAPI(
     version="1.0.0"
 )
 
-@app.on_Event("statrup")
+@app.on_event("startup")
 async def on_startup():
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
