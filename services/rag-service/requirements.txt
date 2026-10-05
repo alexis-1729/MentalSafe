@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+python-dotenv
+sqlalchemy
+httpx
+qdrant_client
+sentence_transformers
+asyncpg

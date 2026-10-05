@@ -1,70 +1,266 @@
-version: "3.9"
-
 services:
-  auth-service:
+  authservice:
     build:
       context: ./services/auth-service
-    container_name: auth-service
+    container_name: authservice
     ports:
-      - "8000:8000" #los puertos de ejecucion de un servicio
+      - "8000:8000"
     depends_on:
-      - auth-db
+      - authdb
     env_file:
       - ./services/auth-service/.env
     networks:
-      - mentalnet #red local interna de microservicios
+      - mentalnet
 
-  auth-db:
+  authdb:
     image: postgres:14
-    container_name: auth-db
+    container_name: authdb
     ports:
-      - "5436:5432" #nota: el puerto de la base de datos sigue una secuencia, para el caso de users seria 5437:5432
+      - "5436:5432"
     volumes:
       - auth-db-data:/var/lib/postgresql/data
+    
+    environment:
+      - POSTGRES_DB=authdb
+      - POSTGRES_USER=alexis1729
+      - POSTGRES_PASSWORD=Singer22jkM
     networks:
       - mentalnet
 
-  chatbot-service:
-    build:
-      context: ./services/chatbot-service
-    container_name: chatbot-service
+  test-service:
+    build: ./services/test-service
+    container_name: test_container
     ports:
-      - "8001:8001"
-    depends_on:
-      - chat-db
-    env_file:
-      - ./services/chatbot-service/.env
-    networks:
-      - mentalnet
-
-  chat-db:
-    image: postgres:14
-    container_name: chat-db
-    ports:
-     - "5435:5432"
+      - "8003:8000"  
     volumes:
-      - chat-db-data:/var/lib/postgresql/data
+      - ./services/test-service:/app
+    environment:
+      - DATABASE_URL=sqlite:///./test_service.db
+    depends_on:
+      - users-service
     networks:
       - mentalnet
 
-  dialogflow-chatbot:
+  test-db:
+    image: postgres:14
+    container_name: test-db
+    ports:
+      - "5435:5432"
+    volumes:
+      - test-db-data:/var/lib/postgresql/data
+    
+    environment:
+      - POSTGRES_DB=testdb
+      - POSTGRES_USER=testuser
+      - POSTGRES_PASSWORD=testpass
+    networks:
+      - mentalnet
+
+  rag-service:
     build:
-      context: services/chat-service #ruta de localizacion de un servicio
-    container_name: dialogflow-chatbot #nombre del contenedor y con el cual levantaras y contruiras el servicio
+      context: ./services/rag-service
+    container_name: rag-service
     ports:
       - "8002:8002"
-    volumes:
-      - ./services/chat-service/app/prueba.json:/app/prueba.json
+    depends_on:
+      - rag-db
     env_file:
-      - ./services/chat-service/.env
+      - ./services/rag-service/.env
     networks:
       - mentalnet
 
-  users-service: #aqui la implementacion del servicio
+  rag-db:
+    image: postgres:14
+    container_name: rag-db
+    ports:
+      - "5437:5432"
+    volumes:
+      - rag-db-data:/var/lib/postgresql/data
+    environment:
+    - POSTGRES_DB=sessiondb
+    - POSTGRES_USER=alexis1729
+    - POSTGRES_PASSWORD=Singer22jkM
+    networks:
+      - mentalnet
+
+  users-service:
+    build:
+      context: ./services/users-service 
+      dockerfile: Dockerfile
+    container_name: users_container
+    ports:
+      - "8010:8000"  
+    volumes:
+      - ./services/users-service:/app  
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://alexis1729:Singer22jkM@usersdb:5432/usersdb
+    restart: always
+    depends_on:
+      - usersdb
+    networks:
+      - mentalnet
+
+  usersdb:
+    image: postgres:14
+    container_name: usersdb
+    ports:
+      - "5438:5432"
+    volumes:
+      - users-db-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=usersdb
+      - POSTGRES_USER=alexis1729
+      - POSTGRES_PASSWORD=Singer22jkM
+    networks:
+      - mentalnet
+
+  course-service:
+    build:
+      context: ./services/course-service
+    container_name: course-service
+    ports:
+      - "8004:8004"
+    depends_on:
+      - course-db
+    env_file:
+      - ./services/course-service/.env
+    networks:
+      - mentalnet
+
+  course-db:
+    image: postgres:14
+    container_name: course-db
+    ports:
+      - "5439:5432"
+    volumes:
+      - course-db-data:/var/lib/postgresql/data
+    environment:
+    - POSTGRES_DB=coursedb
+    - POSTGRES_USER=courseU
+    - POSTGRES_PASSWORD=singer221s
+    networks:
+      - mentalnet
+
+  profesional-service:
+    build:
+      context: ./services/profesional-service
+    container_name: profesional-service
+    ports:
+      - "8005:8005"
+    depends_on:
+      - profesional-db
+    env_file:
+      - ./services/profesional-service/.env
+    networks:
+      - mentalnet
+
+  profesional-db:
+    image: postgres:14
+    container_name: profesional-db
+    ports:
+      - "5440:5432"
+    volumes:
+      - profesional-db-data:/var/lib/postgresql/data
+    environment:
+    - POSTGRES_DB=profesionaldb
+    - POSTGRES_USER=profesionalU
+    - POSTGRES_PASSWORD=singer223s
+    networks:
+      - mentalnet
+
+  chating-service:
+    build:
+      context: ./services/chating-service
+    container_name: chating-service
+    ports: 
+      - "8006:8006"
+    depends_on:
+      - chating-db
+    env_file:
+      - ./services/chating-service/.env
+    networks:
+      - mentalnet
+
+  chating-db:
+    image: postgres:14
+    container_name: chating-db
+    ports:
+      - "5441:5432"
+    volumes:
+      - chating-db-data:/var/lib/postgresql/data
+    environment:
+    - POSTGRES_DB=chatingdb
+    - POSTGRES_USER=chatinguser
+    - POSTGRES_PASSWORD=singe22llm
+    networks:
+      - mentalnet
+
+  notification-service:
+    build:
+      context: ./services/notification-service
+    container_name: notification-service
+    ports:
+      - "8007:8007"
+    depends_on:
+      - notification-db
+    env_file:
+      - ./services/notification-service/.env
+    networks:
+      - mentalnet
+  
+  notification-db:
+    image: postgres:14
+    container_name: notification-db
+    ports:
+      - "5442:5432"
+    volumes:
+      - notification-db-data:/var/lib/postgresql/data
+    environment:
+    - POSTGRES_DB=notificationdb
+    - POSTGRES_USER=notiuser
+    - POSTGRES_PASSWORD=singernoti22
+    networks:
+      - mentalnet
+
+  nlp-service:
+    build: 
+      context: ./services/nlp-service
+    container_name: nlp-service
+    ports:
+      - "8008:8008"
+    networks:
+      - mentalnet
+  
+  llm-service:
+    build:
+      context: ./services/llm-service
+    container_name: llm-service
+    ports: 
+      - "8009:8009"
+    env_file:
+      - ./services/llm-service/.env
+    networks:
+      - mentalnet
+  
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: qdrant_local
+    ports:
+      - "6333:6333"
+    volumes:
+      - ./qdrant_storage:/qdrant/storage:z
+    environment:
+      - QDRANT__SERVICE__ENABLE_STATIC_CONTENT=true 
 
 volumes:
   auth-db-data:
-  chat-db-data:
+  users-db-data:
+  rag-db-data:
+  test-db-data:
+  course-db-data:
+  profesional-db-data:
+  chating-db-data:
+  notification-db-data:
 
 networks:
   mentalnet:
